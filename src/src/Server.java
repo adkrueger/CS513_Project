@@ -1,5 +1,9 @@
 package src;
 
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -7,7 +11,9 @@ import java.util.Scanner;
 public class Server {
 
     private int sockNum;
-    private HashMap<Integer, String> clients;
+    private HashMap<String, Integer> clients;
+    private Socket socket;
+    private ServerSocket serverSocket;
 
     public static void main(String[] args) {
         // write your code here
@@ -25,23 +31,51 @@ public class Server {
     }
 
     public Server(int sockNum) {
-        this.sockNum = sockNum;
-        // clients will be in the format of <ConnectingSocketNumber, Nickname>
-        this.clients = new HashMap<>();
+        try {
+            this.sockNum = sockNum;
+            this.serverSocket = new ServerSocket(sockNum);
+            // clients will be in the format of <ConnectingSocketNumber, Nickname>
+            this.clients = new HashMap<>();
+        }
+        catch(IOException e) {
+            System.out.println("Error, couldn't start ServerSocket: " + e);
+        }
     }
 
     private void beginListening() {
         // TODO make it so users connecting will print out a notice that they're connecting
-        
+        System.out.println("Server started, now waiting for client...");
+        while(true) {
+            DataInputStream clientInput;
+            try {
+                System.out.println("back at top");
+                this.socket = serverSocket.accept();
+                System.out.println("Client accepted! Checking for input...");
+
+                clientInput = new DataInputStream(this.socket.getInputStream());
+                String strIn = clientInput.toString();
+                System.out.println("Client says: " + strIn);
+                String[] inputCommands = strIn.split(" ");
+
+                // Check if we need to add the client to our list of clients
+                if(!isDuplicateName(inputCommands[0])) {
+                    // TODO figure out connNum???
+                    setNickname(0, inputCommands[0]);
+                }
+
+                if(inputCommands.length > 1) {
+                    System.out.println("client command is: " + inputCommands[1]);
+
+                }
+            }
+            catch(IOException e) {
+                System.out.println("Error, couldn't accept client: " + e);
+            }
+        }
     }
 
     private boolean isDuplicateName(String nickname) {
-        for(String n : clients.values()) {
-            if(n.equals(nickname)) {
-                return false;
-            }
-        }
-        return true;
+        return clients.containsKey(nickname);
     }
 
     /**
@@ -55,12 +89,12 @@ public class Server {
             System.out.println("found duplicate name");
             return false;
         }
-        clients.put(connNum, nickname);
+        clients.put(nickname, connNum);
         System.out.println("Successfully added " + nickname + " with connection number " + connNum);
         return true;
     }
 
-    public HashMap<Integer, String> getClientList() {
+    public HashMap<String, Integer> getClientList() {
         return clients;
     }
 

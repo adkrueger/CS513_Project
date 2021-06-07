@@ -23,9 +23,15 @@ public class Client {
             DataOutputStream clientOutput = new DataOutputStream(socket.getOutputStream());
             DataInputStream serverOutput = new DataInputStream( new BufferedInputStream(socket.getInputStream()));
 
+            //TODO I think the current issue is that I need to have this code write to its own port rather than the server?
+            //TODO ConnectedHelper reads from the client's port
+
             // try setting up the client's nickname
+            scan.nextLine();
             String nickname = scan.nextLine();
+            System.out.println("accepted name: " + nickname);
             clientOutput.writeUTF(nickname);
+            System.out.println("nickname written to server");
             String response = serverOutput.readUTF();
             System.out.println("sent nickname, serverOutput is: " + response);
             while(response.equals("duplicate")) {

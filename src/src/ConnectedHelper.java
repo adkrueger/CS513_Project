@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 
-public class ConnectedHelper implements Runnable {
+class ConnectedHelper implements Runnable {
 
     private Socket client;
 

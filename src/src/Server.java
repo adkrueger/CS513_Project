@@ -4,7 +4,6 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -12,7 +11,7 @@ public class Server {
 
     private int sockNum;
     private HashMap<String, Integer> clients;
-    private Socket socket;
+    private Socket currClientSocket;
     private ServerSocket serverSocket;
 
     public static void main(String[] args) {
@@ -48,11 +47,14 @@ public class Server {
         while(true) {
             DataInputStream clientInput;
             try {
-                System.out.println("back at top");
-                this.socket = serverSocket.accept();
+                System.out.println("back at top, starting new thread");
+
+                this.currClientSocket = serverSocket.accept();
+                ConnectedHelper helper = new ConnectedHelper(this.currClientSocket);
+                Thread thread = new Thread(helper);
                 System.out.println("Client accepted! Checking for input...");
 
-                clientInput = new DataInputStream(this.socket.getInputStream());
+                clientInput = new DataInputStream(this.currClientSocket.getInputStream());
                 String strIn = clientInput.toString();
                 System.out.println("Client says: " + strIn);
                 String[] inputCommands = strIn.split(" ");

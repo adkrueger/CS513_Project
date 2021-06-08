@@ -26,6 +26,10 @@ public class Client {
             //TODO I think the current issue is that I need to have this code write to its own port rather than the server?
             //TODO ConnectedHelper reads from the client's port
 
+            //TODO make sure ConnHelper reads the client output; client sends it, but conn helper doesn't say anything about receipt
+            //          maybe change output stream to match that in the thread? check website to see how that guy outputs
+            //TODO also, can start trying to deal with setting nicknames and stuff (have CH call server.setNickname)
+
             // try setting up the client's nickname
             scan.nextLine();
             String nickname = scan.nextLine();

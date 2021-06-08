@@ -4,15 +4,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 
 class ConnectedHelper implements Runnable {
 
     private Socket client;
+    private Server server;
 
-    public ConnectedHelper(Socket client) {
+    public ConnectedHelper(Socket client, Server server) {
         this.client = client;
+        this.server = server;
     }
 
     public void run() {
@@ -27,7 +30,15 @@ class ConnectedHelper implements Runnable {
             System.out.println("Error encountered in ConnectedHelper setup: " + e);
         }
 
+        System.out.println("Client at port " + client.getPort() + " has a thread.");
         String curr_message;
+
+        curr_message = Integer.toString(client.getPort());
+        serverOutput.println(curr_message);
+        System.out.println("Server returned: " + curr_message);
+
+        System.out.println("currently, server has the following list:");
+        System.out.println(this.server.getClientList().toString());
 
         while(true) {
             try {

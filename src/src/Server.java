@@ -10,7 +10,40 @@ import java.util.Scanner;
 public class Server {
 
     private int sockNum;
-    private HashMap<String, Integer> clients;
+
+    public int getSockNum() {
+        return sockNum;
+    }
+
+    public void setSockNum(int sockNum) {
+        this.sockNum = sockNum;
+    }
+
+    public HashMap<String, Integer> getClients() {
+        return clients;
+    }
+
+    public void setClients(HashMap<String, Integer> clients) {
+        this.clients = clients;
+    }
+
+    public Socket getCurrClientSocket() {
+        return currClientSocket;
+    }
+
+    public void setCurrClientSocket(Socket currClientSocket) {
+        this.currClientSocket = currClientSocket;
+    }
+
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    public void setServerSocket(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
+    }
+
+    private volatile HashMap<String, Integer> clients;
     private Socket currClientSocket;
     private ServerSocket serverSocket;
 
@@ -50,8 +83,9 @@ public class Server {
                 System.out.println("back at top, starting new thread");
 
                 this.currClientSocket = serverSocket.accept();
-                ConnectedHelper helper = new ConnectedHelper(this.currClientSocket);
+                ConnectedHelper helper = new ConnectedHelper(this.currClientSocket, this);
                 Thread thread = new Thread(helper);
+                thread.start(); //TODO uncomment when ready
                 System.out.println("Client accepted! Checking for input...");
 
                 clientInput = new DataInputStream(this.currClientSocket.getInputStream());
@@ -62,7 +96,7 @@ public class Server {
                 // Check if we need to add the client to our list of clients
                 if(!isDuplicateName(inputCommands[0])) {
                     // TODO figure out connNum???
-                    setNickname(0, inputCommands[0]);
+                    setNickname(this.currClientSocket.getPort(), inputCommands[0]);
                 }
 
                 if(inputCommands.length > 1) {

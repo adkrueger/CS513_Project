@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Server {
@@ -84,12 +85,11 @@ public class Server {
                 this.currClientSocket = serverSocket.accept();
                 ConnectedHelper helper = new ConnectedHelper(this.currClientSocket, this);
                 Thread thread = new Thread(helper);
-                thread.start(); //TODO uncomment when ready
-                System.out.println("Client accepted! Checking for input...");
-
-                clientInput = new DataInputStream(this.currClientSocket.getInputStream());
-                String strIn = clientInput.toString();
-                System.out.println("Client says: " + strIn);
+                thread.start();
+//                System.out.println("Client accepted! Checking for input...");
+//                clientInput = new DataInputStream(this.currClientSocket.getInputStream());
+//                String strIn = clientInput.toString();
+//                System.out.println("Client says: " + strIn);
             }
             catch(IOException e) {
                 System.out.println("Error, couldn't accept client: " + e);
@@ -119,6 +119,17 @@ public class Server {
 
     public HashMap<String, Integer> getClientList() {
         return clients;
+    }
+
+    public String getNicknameFromPort(int portNum) {
+        if(clients.containsValue(portNum)) {
+            for(Map.Entry<String, Integer> entry : clients.entrySet()) {
+                if(entry.getValue() == portNum) {
+                    return entry.getKey();
+                }
+            }
+        }
+        return null;
     }
 
 }

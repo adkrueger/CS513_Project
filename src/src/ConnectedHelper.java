@@ -6,16 +6,21 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 
 class ConnectedHelper implements Runnable {
 
     private Socket client;
     private Server server;
+    private int clientPort;
+    private String clientNick;
 
     public ConnectedHelper(Socket client, Server server) {
         this.client = client;
         this.server = server;
+        this.clientPort = client.getPort();
+        this.clientNick = null;
     }
 
     public void run() {
@@ -30,12 +35,12 @@ class ConnectedHelper implements Runnable {
             System.out.println("Error encountered in ConnectedHelper setup: " + e);
         }
 
-        System.out.println("Client at port " + client.getPort() + " has a thread.");
+        System.out.println("Client at port " + this.clientPort + " has a thread.");
         String curr_message;
 
-        curr_message = Integer.toString(client.getPort());
-        serverOutput.println(curr_message);
-        System.out.println("Server returned: " + curr_message);
+//        curr_message = Integer.toString(this.clientPort);
+//        serverOutput.println(curr_message);
+//        System.out.println("Server returned: " + curr_message);
 
         System.out.println("currently, server has the following list:");
         System.out.println(this.server.getClientList().toString());
@@ -43,15 +48,19 @@ class ConnectedHelper implements Runnable {
         while(true) {
             try {
                 curr_message = clientInput.readLine();
-                serverOutput.println(curr_message);
+//                serverOutput.println(curr_message);
                 System.out.println("Client says: " + curr_message);
 
                 String[] inputCommands = curr_message.split(" ");
 
                 // Check if we need to add the client to our list of clients
                 if(!server.isDuplicateName(inputCommands[0])) {
-                    // TODO figure out connNum???
-                    server.setNickname(this.client.getPort(), inputCommands[0]);
+                    server.setNickname(this.clientPort, inputCommands[0]);
+                    this.clientNick = inputCommands[0];
+                    serverOutput.println(curr_message); // send their name back as acknowledgement
+                }
+                else {
+                    serverOutput.println("duplicate");
                 }
 
                 if(inputCommands.length > 1) {
@@ -60,7 +69,8 @@ class ConnectedHelper implements Runnable {
                 }
             }
             catch(IOException e) {
-                System.out.println("Error when reading client input message: " + e);
+                System.out.println("Client '" + this.clientNick + "' disconnected.");
+                return;
             }
             catch(NullPointerException e) {
                 System.out.println("Client input caused NullPointerException: " + e);

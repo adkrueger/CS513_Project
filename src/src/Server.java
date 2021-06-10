@@ -10,6 +10,9 @@ import java.util.Scanner;
 public class Server {
 
     private int sockNum;
+    private volatile HashMap<String, Integer> clients;
+    private Socket currClientSocket;
+    private ServerSocket serverSocket;
 
     public int getSockNum() {
         return sockNum;
@@ -42,10 +45,6 @@ public class Server {
     public void setServerSocket(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
     }
-
-    private volatile HashMap<String, Integer> clients;
-    private Socket currClientSocket;
-    private ServerSocket serverSocket;
 
     public static void main(String[] args) {
         // write your code here
@@ -91,18 +90,6 @@ public class Server {
                 clientInput = new DataInputStream(this.currClientSocket.getInputStream());
                 String strIn = clientInput.toString();
                 System.out.println("Client says: " + strIn);
-                String[] inputCommands = strIn.split(" ");
-
-                // Check if we need to add the client to our list of clients
-                if(!isDuplicateName(inputCommands[0])) {
-                    // TODO figure out connNum???
-                    setNickname(this.currClientSocket.getPort(), inputCommands[0]);
-                }
-
-                if(inputCommands.length > 1) {
-                    System.out.println("client command is: " + inputCommands[1]);
-
-                }
             }
             catch(IOException e) {
                 System.out.println("Error, couldn't accept client: " + e);
@@ -110,7 +97,7 @@ public class Server {
         }
     }
 
-    private boolean isDuplicateName(String nickname) {
+    public boolean isDuplicateName(String nickname) {
         return clients.containsKey(nickname);
     }
 

@@ -1,9 +1,6 @@
 package src;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -20,30 +17,23 @@ public class Client {
         try {
             Socket socket = new Socket("127.0.0.1", portNum);
             System.out.println("Connected! Enter your nickname for the server.");
-            DataOutputStream clientOutput = new DataOutputStream(socket.getOutputStream());
-            DataInputStream serverOutput = new DataInputStream( new BufferedInputStream(socket.getInputStream()));
-
-            //TODO I think the current issue is that I need to have this code write to its own port rather than the server?
-            //TODO ConnectedHelper reads from the client's port
-
-            //TODO make sure ConnHelper reads the client output; client sends it, but conn helper doesn't say anything about receipt
-            //          maybe change output stream to match that in the thread? check website to see how that guy outputs
-            //TODO also, can start trying to deal with setting nicknames and stuff (have CH call server.setNickname)
+            PrintWriter clientOutput = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader serverOutput = new BufferedReader( new InputStreamReader(socket.getInputStream()));
 
             // try setting up the client's nickname
             scan.nextLine();
             String nickname = scan.nextLine();
             System.out.println("accepted name: " + nickname);
-            clientOutput.writeUTF(nickname);
+            clientOutput.println(nickname);
             System.out.println("nickname written to server");
-            String response = serverOutput.readUTF();
+            String response = serverOutput.readLine();
             System.out.println("sent nickname, serverOutput is: " + response);
             while(response.equals("duplicate")) {
                 System.out.println("Server already has nickname '" + nickname + "' on record, " +
                         "please enter a unique one.");
                 nickname = scan.nextLine();
-                clientOutput.writeUTF(nickname);
-                response = serverOutput.readUTF();
+                clientOutput.println(nickname);
+                response = serverOutput.readLine();
             }
             System.out.println("nickname successfully set to " + nickname);
 
@@ -53,8 +43,8 @@ public class Client {
             while(!curr_input.equals("!disconnect")) {
                 curr_input = scan.nextLine();
                 System.out.println("input: " + curr_input + ", writing to server...");
-                clientOutput.writeUTF(nickname + " " + curr_input);
-                response = serverOutput.readUTF();
+                clientOutput.println(nickname + " " + curr_input);
+                response = serverOutput.readLine();
                 System.out.println("command successful, server response: " + response);
             }
         }

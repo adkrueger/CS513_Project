@@ -45,6 +45,19 @@ class ConnectedHelper implements Runnable {
                 curr_message = clientInput.readLine();
                 serverOutput.println(curr_message);
                 System.out.println("Client says: " + curr_message);
+
+                String[] inputCommands = curr_message.split(" ");
+
+                // Check if we need to add the client to our list of clients
+                if(!server.isDuplicateName(inputCommands[0])) {
+                    // TODO figure out connNum???
+                    server.setNickname(this.client.getPort(), inputCommands[0]);
+                }
+
+                if(inputCommands.length > 1) {
+                    System.out.println("client command is: " + inputCommands[1]);
+
+                }
             }
             catch(IOException e) {
                 System.out.println("Error when reading client input message: " + e);

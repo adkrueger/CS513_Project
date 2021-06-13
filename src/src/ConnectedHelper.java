@@ -71,8 +71,15 @@ class ConnectedHelper implements Runnable {
                     }
                     else if(inputCommands.length >= 2) {
                         if(clientCommand.equals("!message")) {
-                            server.messageAll(inputCommands[1] + " " + inputCommands[2], this.clientNick);
-                            System.out.println("User '" + this.clientNick + "' sent a message to everyone saying: " + inputCommands[1]);
+                            // have to deal with a slight detail of parsing the strings; easier to use just an if than change the whole infrastructure
+                            if(inputCommands.length == 2) {
+                                server.messageAll(inputCommands[1], this.clientNick);
+                                System.out.println("User '" + this.clientNick + "' sent a message to everyone saying: " + inputCommands[1]);
+                            }
+                            else {
+                                server.messageAll(inputCommands[1] + " " + inputCommands[2], this.clientNick);
+                                System.out.println("User '" + this.clientNick + "' sent a message to everyone saying: " + inputCommands[1] + " " + inputCommands[2]);
+                            }
                         }
                         else if(clientCommand.equals("!rename")) {
                             String oldNick = this.clientNick;
@@ -81,7 +88,7 @@ class ConnectedHelper implements Runnable {
                                 return;
                             }
                             else {
-                                System.out.println("User '" + oldNick + "' successfully renamed to '" + this.clientNick + "'.");
+                                System.out.println("User '" + oldNick + "' successfully renamed to '" + this.clientNick + "'");
                                 server.removeUser(oldNick);
                             }
                         }
@@ -89,18 +96,21 @@ class ConnectedHelper implements Runnable {
                             if(inputCommands.length >= 3) {
                                 if(server.userExists(inputCommands[1])) {
                                     System.out.println("client exists, attempting to whisper...........................");
+                                    for(String s : inputCommands) {
+                                        System.out.println(s);
+                                    }
                                     if(server.whisper(this.clientNick, inputCommands[1], inputCommands[2])) {
                                         System.out.println("User '" + this.clientNick + "' whispered to user '" + inputCommands[1] + "': " + inputCommands[2]);
                                         serverOutput.println("You whispered to user '" + inputCommands[1] + "'.");
                                     }
                                     else {
-                                        System.out.println("User '" + this.clientNick + "' failed to whisper to user '" + inputCommands[1]);
+                                        System.out.println("User '" + this.clientNick + "' failed to whisper to user '" + inputCommands[1] + "'");
                                         serverOutput.println("Whisper to user '" + inputCommands[1] + "' failed. Please try again.");
                                     }
                                 }
                                 else {
                                     serverOutput.println("User " + inputCommands[1] + " does not exist!");
-                                    System.out.println("User '" + this.clientNick + "' failed to whisper to user '" + inputCommands[1]);
+                                    System.out.println("User '" + this.clientNick + "' failed to whisper to user '" + inputCommands[1] + "'");
                                 }
                             }
                             else {

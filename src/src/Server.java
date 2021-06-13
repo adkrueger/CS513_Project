@@ -117,6 +117,9 @@ public class Server {
         }
         clients.put(nickname, connNum);
         System.out.println("Successfully added " + nickname + " with connection number " + connNum);
+
+
+
         return true;
     }
 
@@ -153,6 +156,9 @@ public class Server {
     }
 
     public boolean whisper(String source, String target, String message) {
+        System.out.println("Trying to whisper between " + source + " and " + target);
+        System.out.println("detail: " + clients.get(target));
+        System.out.println("detail 2: " + clientSockets.get(clients.get(target)));
         try {
             PrintWriter serverOutput = new PrintWriter(clientSockets.get(clients.get(target)).getOutputStream(), true);
             serverOutput.println("whisper from user '" + source + "' to '" + target + "': " + message);

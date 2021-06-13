@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="0071e628-ad39-4c42-80e0-771c1838ad0d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/ClientHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/ClientHelper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src/ConnectedHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/ConnectedHelper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/Server.java" afterDir="false" />
     </list>
@@ -30,9 +28,9 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="IDEA_MODULE" value="2" />
-          <entry key="JAVA" value="13034" />
+          <entry key="JAVA" value="13381" />
           <entry key="Markdown" value="252" />
-          <entry key="PLAIN_TEXT" value="781" />
+          <entry key="PLAIN_TEXT" value="852" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
@@ -47,11 +45,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/src/Server.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="157" column="83" selection-start-line="157" selection-start-column="83" selection-end-line="157" selection-end-column="83" />
+            <state relative-caret-position="243">
+              <caret line="159" column="60" selection-start-line="159" selection-start-column="60" selection-end-line="159" selection-end-column="60" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#5336#5337#0" expanded="true" />
@@ -64,8 +62,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/src/ConnectedHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="784">
-              <caret line="159" column="37" selection-start-line="159" selection-start-column="19" selection-end-line="159" selection-end-column="37" />
+            <state relative-caret-position="-148">
+              <caret line="81" selection-start-line="81" selection-end-line="81" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -82,11 +80,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/src/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="393">
-              <caret line="149" column="58" selection-start-line="149" selection-start-column="58" selection-end-line="149" selection-end-column="58" />
+            <state relative-caret-position="2368">
+              <caret line="156" column="24" lean-forward="true" selection-start-line="156" selection-start-column="24" selection-end-line="156" selection-end-column="24" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#375#376#0" expanded="true" />
@@ -121,6 +119,8 @@
     <findStrings>
       <find>client.getPort()</find>
       <find>'</find>
+      <find>clientsocket</find>
+      <find>clientsockets</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -134,10 +134,10 @@
         <option value="$PROJECT_DIR$/adkrueger_CS513Project.iml" />
         <option value="$PROJECT_DIR$/README.txt" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/src/src/Server.java" />
-        <option value="$PROJECT_DIR$/src/src/ConnectedHelper.java" />
         <option value="$PROJECT_DIR$/src/src/ClientHelper.java" />
         <option value="$PROJECT_DIR$/src/src/Client.java" />
+        <option value="$PROJECT_DIR$/src/src/ConnectedHelper.java" />
+        <option value="$PROJECT_DIR$/src/src/Server.java" />
       </list>
     </option>
   </component>
@@ -187,7 +187,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1623606950173" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1623608486010" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -242,7 +242,7 @@
       <workItem from="1623033936885" duration="1987000" />
       <workItem from="1623116764835" duration="2399000" />
       <workItem from="1623288025518" duration="4251000" />
-      <workItem from="1623545681856" duration="14847000" />
+      <workItem from="1623545681856" duration="16457000" />
     </task>
     <task id="LOCAL-00001" summary="adding new helper file for threads">
       <created>1623032814269</created>
@@ -335,11 +335,18 @@
       <option name="project" value="LOCAL" />
       <updated>1623554365730</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="got nickname duplication working for the most part, need to fix whisper">
+      <created>1623607115480</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1623607115480</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34496000" />
+    <option name="totallyTimeSpent" value="36106000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1286" y="0" width="1292" height="1365" extended-state="0" />
@@ -396,7 +403,8 @@
     <MESSAGE value="adding README" />
     <MESSAGE value="fixing README..?" />
     <MESSAGE value="forgot a backslash " />
-    <option name="LAST_COMMIT_MESSAGE" value="forgot a backslash " />
+    <MESSAGE value="got nickname duplication working for the most part, need to fix whisper" />
+    <option name="LAST_COMMIT_MESSAGE" value="got nickname duplication working for the most part, need to fix whisper" />
   </component>
   <component name="editorHistoryManager">
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_192/src.zip!/java/io/DataOutputStream.java">
@@ -437,28 +445,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/src/Server.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="157" column="83" selection-start-line="157" selection-start-column="83" selection-end-line="157" selection-end-column="83" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#5336#5337#0" expanded="true" />
-            <element signature="e#5361#5362#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/src/ConnectedHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="784">
-          <caret line="159" column="37" selection-start-line="159" selection-start-column="19" selection-end-line="159" selection-end-column="37" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/src/ClientHelper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="325">
@@ -471,12 +457,34 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/src/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="393">
-          <caret line="149" column="58" selection-start-line="149" selection-start-column="58" selection-end-line="149" selection-end-column="58" />
+        <state relative-caret-position="2368">
+          <caret line="156" column="24" lean-forward="true" selection-start-line="156" selection-start-column="24" selection-end-line="156" selection-end-column="24" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#375#376#0" expanded="true" />
             <element signature="e#414#415#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/src/ConnectedHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-148">
+          <caret line="81" selection-start-line="81" selection-end-line="81" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/src/Server.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="159" column="60" selection-start-line="159" selection-start-column="60" selection-end-line="159" selection-end-column="60" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#5336#5337#0" expanded="true" />
+            <element signature="e#5361#5362#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -2,6 +2,7 @@ package src;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ public class Server {
     private int sockNum;
     private volatile HashMap<String, Integer> clients;
     private volatile HashMap<String, String> messages;
+    private volatile HashMap<Integer, Socket> clientSockets;
     private Socket currClientSocket;
     private ServerSocket serverSocket;
 
@@ -83,6 +85,8 @@ public class Server {
                 System.out.println("back at top, starting new thread");
 
                 this.currClientSocket = serverSocket.accept();
+                clientSockets.put(this.currClientSocket.getPort(), this.currClientSocket);
+
                 ConnectedHelper helper = new ConnectedHelper(this.currClientSocket, this);
                 Thread thread = new Thread(helper);
                 thread.start();
@@ -129,7 +133,34 @@ public class Server {
     }
 
     public void removeUser(String nickname) {
+        clientSockets.remove(clients.get(nickname));
         clients.remove(nickname);
     }
 
+    public void messageAll(String message) {
+        for(Map.Entry<Integer, Socket> c : clientSockets.entrySet()) {
+            try {
+                PrintWriter serverOutput = new PrintWriter(c.getValue().getOutputStream(), true);
+            }
+            catch(IOException e) {
+                System.out.println("Could not send message to client at port " + c.getKey());
+            }
+        }
+    }
+
+    public boolean whisper(String source, String target, String message) {
+        try {
+            PrintWriter serverOutput = new PrintWriter(clientSockets.get(target).getOutputStream(), true);
+            serverOutput.println("whisper from user '" + source + "': " + message);
+            return true;
+        }
+        catch(IOException e) {
+            System.out.println("Failed to send message from user " + source + " to user " + target);
+            return false;
+        }
+    }
+
+    public boolean userExists(String nickname) {
+        return clients.containsKey(nickname);
+    }
 }

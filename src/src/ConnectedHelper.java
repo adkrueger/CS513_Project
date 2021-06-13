@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.HashMap;
 
 
 class ConnectedHelper implements Runnable {
@@ -56,13 +57,48 @@ class ConnectedHelper implements Runnable {
             try {
                 curr_message = clientInput.readLine();
 //                serverOutput.println(curr_message);
-                System.out.println("Client says: " + curr_message);
+                System.out.println("Client '" + clientNick + "' says: " + curr_message);
 
-                String[] inputCommands = curr_message.split(" ");
+                String[] inputCommands = curr_message.split(" ", 4);
+                System.out.println(inputCommands);
 
                 if(inputCommands.length > 1) {
-                    System.out.println("client command is: " + inputCommands[1]);
+//                    System.out.println("client command is: " + inputCommands[1]);
+                    String clientCommand = inputCommands[1];
 
+                    if(clientCommand.equals("!list")) {
+                        serverOutput.println(server.getClientList().toString());
+                    }
+                    else if(inputCommands.length > 2) {
+                        if(clientCommand.equals("!message")) {
+                            server.messageAll(inputCommands[2]);
+                            System.out.println("User '" + this.clientNick + "' sent a message to everyone saying: " + inputCommands[2]);
+                        }
+                        else if(clientCommand.equals("!rename")) {
+                            String oldNick = this.clientNick;
+                            if(!attemptNicknameSet(clientInput, serverOutput, inputCommands[2])) {
+                                return;
+                            }
+                            else {
+                                System.out.println("User '" + oldNick + "' successfully renamed to '" + this.clientNick + "'.");
+                            }
+                        }
+                        else if(clientCommand.equals("!whisper")) {
+                            if(inputCommands.length >= 4) {
+                                if(server.userExists(inputCommands[2])) {
+                                    server.whisper(this.clientNick, inputCommands[2], inputCommands[3]);
+                                    System.out.println("User '" + this.clientNick + "' whispered to user '" + inputCommands[2] + "': " + inputCommands[3]);
+                                }
+                                else {
+                                    serverOutput.println("User " + inputCommands[2] + " does not exist!");
+                                    System.out.println("User '" + this.clientNick + "' failed to whisper to user '" + inputCommands[2]);
+                                }
+                            }
+                            else {
+                                serverOutput.println("Whisper not sent, please type !help for !whisper usage.");
+                            }
+                        }
+                    }
                 }
             }
             catch(IOException e) {
@@ -99,6 +135,18 @@ class ConnectedHelper implements Runnable {
                 server.removeUser(this.clientNick);
                 return false;
             }
+        }
+    }
+
+    private boolean attemptNicknameSet(BufferedReader clientInput, PrintWriter serverOutput, String nickname) {
+        if (!server.isDuplicateName(nickname)) {
+            server.setNickname(this.clientPort, nickname);
+            this.clientNick = nickname;
+            serverOutput.println("name '" + nickname + "' accepted!"); // send their name back as acknowledgement
+            return true;
+        } else {
+            serverOutput.println("duplicate");
+            return attemptNicknameSet(clientInput, serverOutput);
         }
     }
 

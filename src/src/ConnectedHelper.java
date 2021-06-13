@@ -86,8 +86,14 @@ class ConnectedHelper implements Runnable {
                         else if(clientCommand.equals("!whisper")) {
                             if(inputCommands.length >= 4) {
                                 if(server.userExists(inputCommands[2])) {
-                                    server.whisper(this.clientNick, inputCommands[2], inputCommands[3]);
-                                    System.out.println("User '" + this.clientNick + "' whispered to user '" + inputCommands[2] + "': " + inputCommands[3]);
+                                    if(server.whisper(this.clientNick, inputCommands[2], inputCommands[3])) {
+                                        System.out.println("User '" + this.clientNick + "' whispered to user '" + inputCommands[2] + "': " + inputCommands[3]);
+                                        serverOutput.println("You whispered to user '" + inputCommands[2] + "'.");
+                                    }
+                                    else {
+                                        System.out.println("User '" + this.clientNick + "' failed to whisper to user '" + inputCommands[2]);
+                                        serverOutput.println("Whisper to user '" + inputCommands[2] + "' failed. Please try again.");
+                                    }
                                 }
                                 else {
                                     serverOutput.println("User " + inputCommands[2] + " does not exist!");

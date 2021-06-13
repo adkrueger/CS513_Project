@@ -1,5 +1,5 @@
 # To compile:  
-on the command line, cd to <main project directory>\\src  
+on the command line, cd to \<main project directory>\\src  
 type 'javac src\\\<filename>.java'  
   
 # To run:  

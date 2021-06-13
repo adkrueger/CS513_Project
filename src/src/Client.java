@@ -2,12 +2,17 @@ package src;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.Buffer;
 import java.util.Scanner;
 
 public class Client {
 
-    DataOutputStream clientOutput;
-    DataInputStream serverOutput;
+    private boolean isDuplicate;
+    private String[] legalCommands = {"!help", "!list", "!message", "!rename", "!whisper"};
+
+    public void setDuplicate(boolean duplicate) {
+        isDuplicate = duplicate;
+    }
 
     private Client() {}
 
@@ -29,20 +34,12 @@ public class Client {
             BufferedReader serverOutput = new BufferedReader( new InputStreamReader(socket.getInputStream()));
 
             // try setting up the client's nickname
-            String nickname = scan.nextLine();
-            System.out.println("accepted name: " + nickname);
-            clientOutput.println(nickname);
-            System.out.println("nickname written to server");
-            String response = serverOutput.readLine();
-            System.out.println("sent nickname, serverOutput is: " + response);
-            while(response.equals("duplicate")) {
-                System.out.println("Server already has nickname '" + nickname + "' on record, " +
-                        "please enter a unique one.");
-                nickname = scan.nextLine();
-                clientOutput.println(nickname);
-                response = serverOutput.readLine();
+            System.out.println("Please enter your nickname for the server.");
+            String nickname = enterNamingLoop(scan, clientOutput, serverOutput);
+            if(nickname == null) {
+                System.out.println("Failed to set nickname.");
+                return;
             }
-            System.out.println("nickname successfully set to " + nickname);
 
             // start allowing the client to write commands to the server
             System.out.println("Beginning communications... type '!help' at any time to see valid commands.");
@@ -55,12 +52,28 @@ public class Client {
 
             while(!curr_input.equals("!disconnect")) {
                 curr_input = scan.nextLine();
-                if(curr_input.length() != 0) {
-                    if(!curr_input.substring(5).equals("!help")) {
-                        System.out.println("input: " + curr_input + ", writing to server...");
-                        clientOutput.println(nickname + " " + curr_input);
-                        //                    response = serverOutput.readLine();
-                        //                    System.out.println("command successful, server response: " + response);
+                String currCommand = curr_input.split(" ")[0];
+                if(curr_input.length() >= 5 && isLegalCommand(currCommand)) {
+//                    System.out.println(curr_input.substring(5));
+//                    System.out.println(curr_input.substring(5).equals("!help"));
+                    if(!currCommand.equals("!help")) {
+                        if(currCommand.equals("!rename")) {
+                            nickname = enterRenamingLoop(scan, clientOutput, serverOutput, "!rename " + curr_input.split(" ")[1]);
+                            if(nickname == null) {
+                                System.out.println("Failed to set nickname.");
+                                return;
+                            }
+                            while (isDuplicate) {
+                                System.out.println("Server already has nickname '" + nickname + "' on record, " +
+                                        "please enter a unique one:");
+                                nickname = scan.nextLine();
+                                nickname = enterRenamingLoop(scan, clientOutput, serverOutput, nickname);
+                            }
+                        }
+                        else {
+                            System.out.println("input: " + curr_input + ", writing to server...");
+                            clientOutput.println(curr_input);
+                        }
                     }
                     else {
                         System.out.println("----------------------------------");
@@ -77,12 +90,71 @@ public class Client {
                         System.out.println("\t\tnote: fails if user <target> is not connected to the server.");
                     }
                 }
+                else {
+                    System.out.println("Unrecognized command, please type '!help' to see valid commands.");
+                }
             }
         }
         catch(IOException e) {
-            System.out.println("Error connecting to socket: " + e);
+            System.out.println("Error connecting to server socket: " + e);
         }
 
+    }
+
+    private boolean isLegalCommand(String command) {
+        for(String c : legalCommands) {
+            if(c.equals(command)) { return true; }
+        }
+        return false;
+    }
+
+    public String enterNamingLoop(Scanner scan, PrintWriter clientOutput, BufferedReader serverOutput) {
+        try {
+            String nickname = scan.nextLine();
+            System.out.println("accepted name: " + nickname);
+            while(nickname.trim().isEmpty()) {
+                System.out.println("Nickname must not be whitespace or empty. Please try again:");
+                nickname = scan.nextLine();
+            }
+            clientOutput.println(nickname);
+            System.out.println("nickname written to server");
+            String response = serverOutput.readLine();
+            System.out.println("sent nickname, serverOutput is: " + response);
+            while (response.equals("duplicate")) {
+                System.out.println("Server already has nickname '" + nickname + "' on record, " +
+                        "please enter a unique one.");
+                nickname = scan.nextLine();
+                clientOutput.println(nickname);
+                response = serverOutput.readLine();
+            }
+            System.out.println("nickname successfully set to " + nickname);
+            return nickname;
+        }
+        catch(IOException e) {
+            System.out.println("Error connecting to server socket: " + e);
+            return null;
+        }
+    }
+
+    public String enterRenamingLoop(Scanner scan, PrintWriter clientOutput, BufferedReader serverOutput, String nickname) {
+        while(nickname.trim().isEmpty()) {
+            System.out.println("Nickname must not be whitespace or empty. Please try again:");
+            nickname = scan.nextLine();
+        }
+        clientOutput.println(nickname);
+        System.out.println("nickname written to server");
+        try {
+            Thread.sleep(1000);
+        }
+        catch(InterruptedException e) {
+            System.out.println("Sleep interrupted: " + e);
+        }
+
+//            String response = serverOutput.readLine();
+//            System.out.println("sent nickname, serverOutput is: " + response);
+
+//        System.out.println("nickname successfully set to " + nickname);
+        return nickname;
     }
 
 }

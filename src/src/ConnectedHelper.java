@@ -59,45 +59,48 @@ class ConnectedHelper implements Runnable {
 //                serverOutput.println(curr_message);
                 System.out.println("Client '" + clientNick + "' says: " + curr_message);
 
-                String[] inputCommands = curr_message.split(" ", 4);
-                System.out.println(inputCommands);
+                String[] inputCommands = curr_message.split(" ", 3);
+//                System.out.println(inputCommands);
 
-                if(inputCommands.length > 1) {
+                if(inputCommands.length >= 1) {
 //                    System.out.println("client command is: " + inputCommands[1]);
-                    String clientCommand = inputCommands[1];
+                    String clientCommand = inputCommands[0];
 
                     if(clientCommand.equals("!list")) {
                         serverOutput.println(server.getClientList().toString());
                     }
-                    else if(inputCommands.length > 2) {
+                    else if(inputCommands.length >= 2) {
                         if(clientCommand.equals("!message")) {
-                            server.messageAll(inputCommands[2]);
-                            System.out.println("User '" + this.clientNick + "' sent a message to everyone saying: " + inputCommands[2]);
+                            server.messageAll(inputCommands[1] + " " + inputCommands[2], this.clientNick);
+                            System.out.println("User '" + this.clientNick + "' sent a message to everyone saying: " + inputCommands[1]);
                         }
                         else if(clientCommand.equals("!rename")) {
                             String oldNick = this.clientNick;
-                            if(!attemptNicknameSet(clientInput, serverOutput, inputCommands[2])) {
+                            System.out.println("TRYING TO SET NICKNAME " + inputCommands[1]);
+                            if(!attemptNicknameSet(clientInput, serverOutput, inputCommands[1])) {
                                 return;
                             }
                             else {
                                 System.out.println("User '" + oldNick + "' successfully renamed to '" + this.clientNick + "'.");
+                                server.removeUser(oldNick);
                             }
                         }
                         else if(clientCommand.equals("!whisper")) {
-                            if(inputCommands.length >= 4) {
-                                if(server.userExists(inputCommands[2])) {
-                                    if(server.whisper(this.clientNick, inputCommands[2], inputCommands[3])) {
-                                        System.out.println("User '" + this.clientNick + "' whispered to user '" + inputCommands[2] + "': " + inputCommands[3]);
-                                        serverOutput.println("You whispered to user '" + inputCommands[2] + "'.");
+                            if(inputCommands.length >= 3) {
+                                if(server.userExists(inputCommands[1])) {
+                                    System.out.println("client exists, attempting to whisper...........................");
+                                    if(server.whisper(this.clientNick, inputCommands[1], inputCommands[2])) {
+                                        System.out.println("User '" + this.clientNick + "' whispered to user '" + inputCommands[1] + "': " + inputCommands[2]);
+                                        serverOutput.println("You whispered to user '" + inputCommands[1] + "'.");
                                     }
                                     else {
-                                        System.out.println("User '" + this.clientNick + "' failed to whisper to user '" + inputCommands[2]);
-                                        serverOutput.println("Whisper to user '" + inputCommands[2] + "' failed. Please try again.");
+                                        System.out.println("User '" + this.clientNick + "' failed to whisper to user '" + inputCommands[1]);
+                                        serverOutput.println("Whisper to user '" + inputCommands[1] + "' failed. Please try again.");
                                     }
                                 }
                                 else {
-                                    serverOutput.println("User " + inputCommands[2] + " does not exist!");
-                                    System.out.println("User '" + this.clientNick + "' failed to whisper to user '" + inputCommands[2]);
+                                    serverOutput.println("User " + inputCommands[1] + " does not exist!");
+                                    System.out.println("User '" + this.clientNick + "' failed to whisper to user '" + inputCommands[1]);
                                 }
                             }
                             else {
@@ -122,6 +125,7 @@ class ConnectedHelper implements Runnable {
 
     private boolean attemptNicknameSet(BufferedReader clientInput, PrintWriter serverOutput) {
         while(true) {
+            System.out.println("in big attempt nickname set");
             try {
                 String curr_message = clientInput.readLine();
                 System.out.println("Client says: " + curr_message);
@@ -130,7 +134,7 @@ class ConnectedHelper implements Runnable {
                 if (!server.isDuplicateName(inputCommands[0])) {
                     server.setNickname(this.clientPort, inputCommands[0]);
                     this.clientNick = inputCommands[0];
-                    serverOutput.println("name '" + curr_message + "' accepted!"); // send their name back as acknowledgement
+                    serverOutput.println("name '" + curr_message + "' accepted!");
                     return true;
                 } else {
                     serverOutput.println("duplicate");
@@ -145,6 +149,7 @@ class ConnectedHelper implements Runnable {
     }
 
     private boolean attemptNicknameSet(BufferedReader clientInput, PrintWriter serverOutput, String nickname) {
+        System.out.println("in attempt nickname set (baby version)");
         if (!server.isDuplicateName(nickname)) {
             server.setNickname(this.clientPort, nickname);
             this.clientNick = nickname;

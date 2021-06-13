@@ -33,8 +33,15 @@ public class ClientHelper implements Runnable {
         while (true) {
             try {
                 curr_message = serverInput.readLine();
-                System.out.println("Server says: " + curr_message);
-                //TODO maybe some parsing in the future here to make things look nice?
+                if(curr_message.equals("duplicate")) {
+                    System.out.println("received duplicate message");
+                    client.setDuplicate(true);
+                }
+                else {
+                    client.setDuplicate(false);
+                    System.out.println("Server says: " + curr_message);
+                    //TODO maybe some parsing in the future here to make things look nice?
+                }
 
             } catch (IOException e) {
                 System.out.println("Server disconnected.");

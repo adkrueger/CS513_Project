@@ -71,6 +71,7 @@ public class Server {
             this.serverSocket = new ServerSocket(sockNum);
             // clients will be in the format of <ConnectingSocketNumber, Nickname>
             this.clients = new HashMap<>();
+            this.clientSockets = new HashMap<>();
         }
         catch(IOException e) {
             System.out.println("Error, couldn't start ServerSocket: " + e);
@@ -85,6 +86,8 @@ public class Server {
                 System.out.println("back at top, starting new thread");
 
                 this.currClientSocket = serverSocket.accept();
+//                System.out.println(this.currClientSocket.getPort());
+//                System.out.println(this.currClientSocket);
                 clientSockets.put(this.currClientSocket.getPort(), this.currClientSocket);
 
                 ConnectedHelper helper = new ConnectedHelper(this.currClientSocket, this);
@@ -137,10 +140,11 @@ public class Server {
         clients.remove(nickname);
     }
 
-    public void messageAll(String message) {
+    public void messageAll(String message, String source) {
         for(Map.Entry<Integer, Socket> c : clientSockets.entrySet()) {
             try {
                 PrintWriter serverOutput = new PrintWriter(c.getValue().getOutputStream(), true);
+                serverOutput.println(source + " says: " + message);
             }
             catch(IOException e) {
                 System.out.println("Could not send message to client at port " + c.getKey());
@@ -150,8 +154,8 @@ public class Server {
 
     public boolean whisper(String source, String target, String message) {
         try {
-            PrintWriter serverOutput = new PrintWriter(clientSockets.get(target).getOutputStream(), true);
-            serverOutput.println("whisper from user '" + source + "': " + message);
+            PrintWriter serverOutput = new PrintWriter(clientSockets.get(clients.get(target)).getOutputStream(), true);
+            serverOutput.println("whisper from user '" + source + "' to '" + target + "': " + message);
             return true;
         }
         catch(IOException e) {

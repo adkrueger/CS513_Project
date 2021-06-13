@@ -26,6 +26,7 @@ class ConnectedHelper implements Runnable {
     public void run() {
         BufferedReader clientInput = null;
         PrintWriter serverOutput = null;
+        boolean noNickname = true;
 
         try {
             clientInput = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -45,6 +46,12 @@ class ConnectedHelper implements Runnable {
         System.out.println("currently, server has the following list:");
         System.out.println(this.server.getClientList().toString());
 
+        // attempt to set nickname; if this is false, then the client disconnected
+        if(!attemptNicknameSet(clientInput, serverOutput)) {
+            return;
+        }
+
+        // give the client a chance to set their nickname
         while(true) {
             try {
                 curr_message = clientInput.readLine();
@@ -53,16 +60,6 @@ class ConnectedHelper implements Runnable {
 
                 String[] inputCommands = curr_message.split(" ");
 
-                // Check if we need to add the client to our list of clients
-                if(!server.isDuplicateName(inputCommands[0])) {
-                    server.setNickname(this.clientPort, inputCommands[0]);
-                    this.clientNick = inputCommands[0];
-                    serverOutput.println(curr_message); // send their name back as acknowledgement
-                }
-                else {
-                    serverOutput.println("duplicate");
-                }
-
                 if(inputCommands.length > 1) {
                     System.out.println("client command is: " + inputCommands[1]);
 
@@ -70,6 +67,7 @@ class ConnectedHelper implements Runnable {
             }
             catch(IOException e) {
                 System.out.println("Client '" + this.clientNick + "' disconnected.");
+                server.removeUser(this.clientNick);
                 return;
             }
             catch(NullPointerException e) {
@@ -78,6 +76,30 @@ class ConnectedHelper implements Runnable {
 
         }
 
+    }
+
+    private boolean attemptNicknameSet(BufferedReader clientInput, PrintWriter serverOutput) {
+        while(true) {
+            try {
+                String curr_message = clientInput.readLine();
+                System.out.println("Client says: " + curr_message);
+
+                String[] inputCommands = curr_message.split(" ");
+                if (!server.isDuplicateName(inputCommands[0])) {
+                    server.setNickname(this.clientPort, inputCommands[0]);
+                    this.clientNick = inputCommands[0];
+                    serverOutput.println("name '" + curr_message + "' accepted!"); // send their name back as acknowledgement
+                    return true;
+                } else {
+                    serverOutput.println("duplicate");
+                }
+            }
+            catch(IOException e) {
+                System.out.println("Client '" + this.clientNick + "' disconnected.");
+                server.removeUser(this.clientNick);
+                return false;
+            }
+        }
     }
 
 }

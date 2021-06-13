@@ -12,6 +12,7 @@ public class Server {
 
     private int sockNum;
     private volatile HashMap<String, Integer> clients;
+    private volatile HashMap<String, String> messages;
     private Socket currClientSocket;
     private ServerSocket serverSocket;
 
@@ -75,7 +76,6 @@ public class Server {
     }
 
     private void beginListening() {
-        // TODO make it so users connecting will print out a notice that they're connecting
         System.out.println("Server started, now waiting for client...");
         while(true) {
             DataInputStream clientInput;
@@ -86,10 +86,6 @@ public class Server {
                 ConnectedHelper helper = new ConnectedHelper(this.currClientSocket, this);
                 Thread thread = new Thread(helper);
                 thread.start();
-//                System.out.println("Client accepted! Checking for input...");
-//                clientInput = new DataInputStream(this.currClientSocket.getInputStream());
-//                String strIn = clientInput.toString();
-//                System.out.println("Client says: " + strIn);
             }
             catch(IOException e) {
                 System.out.println("Error, couldn't accept client: " + e);
@@ -130,6 +126,10 @@ public class Server {
             }
         }
         return null;
+    }
+
+    public void removeUser(String nickname) {
+        clients.remove(nickname);
     }
 
 }

@@ -52,14 +52,30 @@ public class Client {
             ClientHelper helper = new ClientHelper(socket, this);
             Thread thread = new Thread(helper);
             thread.start();
-            
+
             while(!curr_input.equals("!disconnect")) {
                 curr_input = scan.nextLine();
                 if(curr_input.length() != 0) {
-                    System.out.println("input: " + curr_input + ", writing to server...");
-                    clientOutput.println(nickname + " " + curr_input);
-//                    response = serverOutput.readLine();
-//                    System.out.println("command successful, server response: " + response);
+                    if(!curr_input.substring(5).equals("!help")) {
+                        System.out.println("input: " + curr_input + ", writing to server...");
+                        clientOutput.println(nickname + " " + curr_input);
+                        //                    response = serverOutput.readLine();
+                        //                    System.out.println("command successful, server response: " + response);
+                    }
+                    else {
+                        System.out.println("----------------------------------");
+                        System.out.println("Usage:");
+                        System.out.println("!list");
+                        System.out.println("\tGets a list of all users currently connected to the server.");
+                        System.out.println("!rename <new name>");
+                        System.out.println("\tAttempts to set your nickname to <new name>.");
+                        System.out.println("\t\tnote: <new name> must not be the same as your current nickname or that of any other connected user.");
+                        System.out.println("!message <message>");
+                        System.out.println("\tSends the message <message> to all users connected to the server (including you).");
+                        System.out.println("!whisper <target> <message>");
+                        System.out.println("\tSends the message <message> to user with nickname <target>.");
+                        System.out.println("\t\tnote: fails if user <target> is not connected to the server.");
+                    }
                 }
             }
         }

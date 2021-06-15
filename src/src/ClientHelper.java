@@ -39,7 +39,7 @@ public class ClientHelper implements Runnable {
                 }
                 else {
                     client.setDuplicate(false);
-                    System.out.println("Server says: " + curr_message);
+                    System.out.println(">> " + curr_message);
                     //TODO maybe some parsing in the future here to make things look nice?
                 }
 

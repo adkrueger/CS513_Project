@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0071e628-ad39-4c42-80e0-771c1838ad0d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src/ClientHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/ClientHelper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src/ConnectedHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/ConnectedHelper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/Server.java" afterDir="false" />
     </list>
@@ -22,15 +23,16 @@
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.12" value="3" />
           <entry key="project.open.time.13" value="1" />
-          <entry key="project.opened" value="6" />
+          <entry key="project.open.time.15" value="1" />
+          <entry key="project.opened" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="IDEA_MODULE" value="2" />
-          <entry key="JAVA" value="13381" />
+          <entry key="JAVA" value="14096" />
           <entry key="Markdown" value="252" />
-          <entry key="PLAIN_TEXT" value="852" />
+          <entry key="PLAIN_TEXT" value="932" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
@@ -45,15 +47,17 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/src/Server.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="159" column="60" selection-start-line="159" selection-start-column="60" selection-end-line="159" selection-end-column="60" />
+            <state relative-caret-position="313">
+              <caret line="167" column="41" selection-start-line="167" selection-start-column="41" selection-end-line="167" selection-end-column="41" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#5336#5337#0" expanded="true" />
-                <element signature="e#5361#5362#0" expanded="true" />
+                <element signature="e#4446#4447#0" expanded="true" />
+                <element signature="e#4476#4477#0" expanded="true" />
+                <element signature="e#6935#6936#0" expanded="true" />
+                <element signature="e#6987#6988#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -62,8 +66,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/src/ConnectedHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-148">
-              <caret line="81" selection-start-line="81" selection-end-line="81" />
+            <state relative-caret-position="913">
+              <caret line="85" column="50" selection-start-line="85" selection-start-column="32" selection-end-line="85" selection-end-column="50" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -73,9 +77,10 @@
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" column="28" selection-start-line="1" selection-start-column="28" selection-end-line="1" selection-end-column="28" />
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor />
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -83,22 +88,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/src/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2368">
-              <caret line="156" column="24" lean-forward="true" selection-start-line="156" selection-start-column="24" selection-end-line="156" selection-end-column="24" />
+            <state relative-caret-position="2567">
+              <caret line="156" column="24" selection-start-line="156" selection-start-column="24" selection-end-line="156" selection-end-column="24" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#375#376#0" expanded="true" />
-                <element signature="e#414#415#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/src/ClientHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="325">
-              <caret line="36" column="66" selection-start-line="36" selection-start-column="66" selection-end-line="36" selection-end-column="66" />
+            <state relative-caret-position="210">
+              <caret line="41" column="40" selection-start-line="41" selection-start-column="40" selection-end-line="41" selection-end-column="40" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -121,6 +124,7 @@
       <find>'</find>
       <find>clientsocket</find>
       <find>clientsockets</find>
+      <find>setNickname</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -134,10 +138,10 @@
         <option value="$PROJECT_DIR$/adkrueger_CS513Project.iml" />
         <option value="$PROJECT_DIR$/README.txt" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/src/src/ClientHelper.java" />
         <option value="$PROJECT_DIR$/src/src/Client.java" />
         <option value="$PROJECT_DIR$/src/src/ConnectedHelper.java" />
         <option value="$PROJECT_DIR$/src/src/Server.java" />
+        <option value="$PROJECT_DIR$/src/src/ClientHelper.java" />
       </list>
     </option>
   </component>
@@ -150,7 +154,7 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="-1286" />
     <option name="width" value="1292" />
-    <option name="height" value="1365" />
+    <option name="height" value="1406" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -158,8 +162,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -182,12 +184,14 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1623608486010" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1623608579742" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -242,7 +246,8 @@
       <workItem from="1623033936885" duration="1987000" />
       <workItem from="1623116764835" duration="2399000" />
       <workItem from="1623288025518" duration="4251000" />
-      <workItem from="1623545681856" duration="16457000" />
+      <workItem from="1623545681856" duration="17074000" />
+      <workItem from="1623721270746" duration="2192000" />
     </task>
     <task id="LOCAL-00001" summary="adding new helper file for threads">
       <created>1623032814269</created>
@@ -342,17 +347,24 @@
       <option name="project" value="LOCAL" />
       <updated>1623607115480</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="need to fix whisper error after rename...">
+      <created>1623608599274</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1623608599274</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36106000" />
+    <option name="totallyTimeSpent" value="38915000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1286" y="0" width="1292" height="1365" extended-state="0" />
+    <frame x="-1286" y="0" width="1292" height="1406" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18993506" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19318181" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -362,7 +374,7 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.50365555" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.5031447" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -404,7 +416,8 @@
     <MESSAGE value="fixing README..?" />
     <MESSAGE value="forgot a backslash " />
     <MESSAGE value="got nickname duplication working for the most part, need to fix whisper" />
-    <option name="LAST_COMMIT_MESSAGE" value="got nickname duplication working for the most part, need to fix whisper" />
+    <MESSAGE value="need to fix whisper error after rename..." />
+    <option name="LAST_COMMIT_MESSAGE" value="need to fix whisper error after rename..." />
   </component>
   <component name="editorHistoryManager">
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_192/src.zip!/java/io/DataOutputStream.java">
@@ -439,38 +452,32 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor />
+          <second_editor />
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="1" column="28" selection-start-line="1" selection-start-column="28" selection-end-line="1" selection-end-column="28" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/src/ClientHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="325">
-          <caret line="36" column="66" selection-start-line="36" selection-start-column="66" selection-end-line="36" selection-end-column="66" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/src/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2368">
-          <caret line="156" column="24" lean-forward="true" selection-start-line="156" selection-start-column="24" selection-end-line="156" selection-end-column="24" />
+        <state relative-caret-position="2567">
+          <caret line="156" column="24" selection-start-line="156" selection-start-column="24" selection-end-line="156" selection-end-column="24" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#375#376#0" expanded="true" />
-            <element signature="e#414#415#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/src/ConnectedHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-148">
-          <caret line="81" selection-start-line="81" selection-end-line="81" />
+        <state relative-caret-position="913">
+          <caret line="85" column="50" selection-start-line="85" selection-start-column="32" selection-end-line="85" selection-end-column="50" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -479,12 +486,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/src/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="159" column="60" selection-start-line="159" selection-start-column="60" selection-end-line="159" selection-end-column="60" />
+        <state relative-caret-position="313">
+          <caret line="167" column="41" selection-start-line="167" selection-start-column="41" selection-end-line="167" selection-end-column="41" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#5336#5337#0" expanded="true" />
-            <element signature="e#5361#5362#0" expanded="true" />
+            <element signature="e#4446#4447#0" expanded="true" />
+            <element signature="e#4476#4477#0" expanded="true" />
+            <element signature="e#6935#6936#0" expanded="true" />
+            <element signature="e#6987#6988#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/src/ClientHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="41" column="40" selection-start-line="41" selection-start-column="40" selection-end-line="41" selection-end-column="40" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

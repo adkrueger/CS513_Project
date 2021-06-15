@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 public class Server {
@@ -110,15 +111,27 @@ public class Server {
      * @param nickname the client's desired nickname
      * @return true if the name was not a duplicate and was successfully added to the client list, false otherwise
      */
-    public boolean setNickname(int connNum, String nickname) {
+    public boolean setNickname(int connNum, String nickname, boolean isRename) {
         if(isDuplicateName(nickname)) {
             System.out.println("found duplicate name");
             return false;
         }
+
+        String oldNick = null;
+
+        if(isRename) {
+            oldNick = getNicknameFromPort(connNum);
+        }
+
         clients.put(nickname, connNum);
         System.out.println("Successfully added " + nickname + " with connection number " + connNum);
 
-
+        if(isRename) {
+            messageAll("User " + oldNick + " renamed to " + nickname + ".", "server");
+        }
+        else {
+            messageAll("User " + nickname + " connected to the server!", "server");
+        }
 
         return true;
     }
@@ -138,8 +151,12 @@ public class Server {
         return null;
     }
 
-    public void removeUser(String nickname) {
-        clientSockets.remove(clients.get(nickname));
+    public void removeUser(String nickname, boolean removeConnection) {
+        if(removeConnection) {
+            System.out.println("Disconnecting user " + nickname + ".");
+            messageAll("User " + nickname + " disconnected.", "server");
+            clientSockets.remove(clients.get(nickname));
+        }
         clients.remove(nickname);
     }
 
@@ -147,7 +164,12 @@ public class Server {
         for(Map.Entry<Integer, Socket> c : clientSockets.entrySet()) {
             try {
                 PrintWriter serverOutput = new PrintWriter(c.getValue().getOutputStream(), true);
-                serverOutput.println(source + " says: " + message);
+                if(source.equals("server")) {
+                    serverOutput.println(message);
+                }
+                else {
+                    serverOutput.println(source + " says: " + message);
+                }
             }
             catch(IOException e) {
                 System.out.println("Could not send message to client at port " + c.getKey());
@@ -158,7 +180,13 @@ public class Server {
     public boolean whisper(String source, String target, String message) {
         System.out.println("Trying to whisper between " + source + " and " + target);
         System.out.println("detail: " + clients.get(target));
+        System.out.println(clientSockets);
         System.out.println("detail 2: " + clientSockets.get(clients.get(target)));
+        System.out.println("client sockets has:");
+        for(Entry<Integer, Socket> e : clientSockets.entrySet()) {
+            System.out.println("hi");
+            System.out.println(e);
+        }
         try {
             PrintWriter serverOutput = new PrintWriter(clientSockets.get(clients.get(target)).getOutputStream(), true);
             serverOutput.println("whisper from user '" + source + "' to '" + target + "': " + message);

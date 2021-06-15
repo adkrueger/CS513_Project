@@ -48,7 +48,7 @@ class ConnectedHelper implements Runnable {
         System.out.println(this.server.getClientList().toString());
 
         // attempt to set nickname; if this is false, then the client disconnected
-        if(!attemptNicknameSet(clientInput, serverOutput)) {
+        if(!attemptNicknameSet(clientInput, serverOutput, false)) {
             return;
         }
 
@@ -83,13 +83,12 @@ class ConnectedHelper implements Runnable {
                         }
                         else if(clientCommand.equals("!rename")) {
                             String oldNick = this.clientNick;
-                            System.out.println("TRYING TO SET NICKNAME " + inputCommands[1]);
-                            if(!attemptNicknameSet(clientInput, serverOutput, inputCommands[1])) {
+                            if(!attemptNicknameSet(clientInput, serverOutput, inputCommands[1], true)) {
                                 return;
                             }
                             else {
                                 System.out.println("User '" + oldNick + "' successfully renamed to '" + this.clientNick + "'");
-                                server.removeUser(oldNick);
+                                server.removeUser(oldNick, false);
                             }
                         }
                         else if(clientCommand.equals("!whisper")) {
@@ -122,7 +121,7 @@ class ConnectedHelper implements Runnable {
             }
             catch(IOException e) {
                 System.out.println("Client '" + this.clientNick + "' disconnected.");
-                server.removeUser(this.clientNick);
+                server.removeUser(this.clientNick, true);
                 return;
             }
             catch(NullPointerException e) {
@@ -133,7 +132,7 @@ class ConnectedHelper implements Runnable {
 
     }
 
-    private boolean attemptNicknameSet(BufferedReader clientInput, PrintWriter serverOutput) {
+    private boolean attemptNicknameSet(BufferedReader clientInput, PrintWriter serverOutput, boolean isRename) {
         while(true) {
             System.out.println("in big attempt nickname set");
             try {
@@ -142,7 +141,7 @@ class ConnectedHelper implements Runnable {
 
                 String[] inputCommands = curr_message.split(" ");
                 if (!server.isDuplicateName(inputCommands[0])) {
-                    server.setNickname(this.clientPort, inputCommands[0]);
+                    server.setNickname(this.clientPort, inputCommands[0], isRename);
                     this.clientNick = inputCommands[0];
                     serverOutput.println("name '" + curr_message + "' accepted!");
                     return true;
@@ -152,22 +151,22 @@ class ConnectedHelper implements Runnable {
             }
             catch(IOException e) {
                 System.out.println("Client '" + this.clientNick + "' disconnected.");
-                server.removeUser(this.clientNick);
+                server.removeUser(this.clientNick, true);
                 return false;
             }
         }
     }
 
-    private boolean attemptNicknameSet(BufferedReader clientInput, PrintWriter serverOutput, String nickname) {
+    private boolean attemptNicknameSet(BufferedReader clientInput, PrintWriter serverOutput, String nickname, boolean isRename) {
         System.out.println("in attempt nickname set (baby version)");
         if (!server.isDuplicateName(nickname)) {
-            server.setNickname(this.clientPort, nickname);
+            server.setNickname(this.clientPort, nickname, isRename);
             this.clientNick = nickname;
             serverOutput.println("name '" + nickname + "' accepted!"); // send their name back as acknowledgement
             return true;
         } else {
             serverOutput.println("duplicate");
-            return attemptNicknameSet(clientInput, serverOutput);
+            return attemptNicknameSet(clientInput, serverOutput, isRename);
         }
     }
 

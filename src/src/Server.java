@@ -1,58 +1,22 @@
 package src;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Scanner;
 
 public class Server {
 
     private int sockNum;
     private volatile HashMap<String, Integer> clients;
-    private volatile HashMap<String, String> messages;
     private volatile HashMap<Integer, Socket> clientSockets;
     private Socket currClientSocket;
     private ServerSocket serverSocket;
 
-    public int getSockNum() {
-        return sockNum;
-    }
-
-    public void setSockNum(int sockNum) {
-        this.sockNum = sockNum;
-    }
-
-    public HashMap<String, Integer> getClients() {
-        return clients;
-    }
-
-    public void setClients(HashMap<String, Integer> clients) {
-        this.clients = clients;
-    }
-
-    public Socket getCurrClientSocket() {
-        return currClientSocket;
-    }
-
-    public void setCurrClientSocket(Socket currClientSocket) {
-        this.currClientSocket = currClientSocket;
-    }
-
-    public ServerSocket getServerSocket() {
-        return serverSocket;
-    }
-
-    public void setServerSocket(ServerSocket serverSocket) {
-        this.serverSocket = serverSocket;
-    }
-
     public static void main(String[] args) {
-        // write your code here
         System.out.println("Initializing server...");
         Scanner scan = new Scanner(System.in);
         System.out.println("Please enter a socket number.\nNote that the number must be " +
@@ -70,7 +34,7 @@ public class Server {
         try {
             this.sockNum = sockNum;
             this.serverSocket = new ServerSocket(sockNum);
-            // clients will be in the format of <ConnectingSocketNumber, Nickname>
+            // clients will be in the format of <Nickname, ConnectingSocketNumber>
             this.clients = new HashMap<>();
             this.clientSockets = new HashMap<>();
         }
@@ -82,13 +46,10 @@ public class Server {
     private void beginListening() {
         System.out.println("Server started, now waiting for client...");
         while(true) {
-            DataInputStream clientInput;
             try {
-                System.out.println("back at top, starting new thread");
+                System.out.println("Server is waiting for next client connection request...");
 
                 this.currClientSocket = serverSocket.accept();
-//                System.out.println(this.currClientSocket.getPort());
-//                System.out.println(this.currClientSocket);
                 clientSockets.put(this.currClientSocket.getPort(), this.currClientSocket);
 
                 ConnectedHelper helper = new ConnectedHelper(this.currClientSocket, this);
@@ -113,7 +74,7 @@ public class Server {
      */
     public boolean setNickname(int connNum, String nickname, boolean isRename) {
         if(isDuplicateName(nickname)) {
-            System.out.println("found duplicate name");
+            System.out.println("Found duplicate name.");
             return false;
         }
 
@@ -178,15 +139,6 @@ public class Server {
     }
 
     public boolean whisper(String source, String target, String message) {
-        System.out.println("Trying to whisper between " + source + " and " + target);
-        System.out.println("detail: " + clients.get(target));
-        System.out.println(clientSockets);
-        System.out.println("detail 2: " + clientSockets.get(clients.get(target)));
-        System.out.println("client sockets has:");
-        for(Entry<Integer, Socket> e : clientSockets.entrySet()) {
-            System.out.println("hi");
-            System.out.println(e);
-        }
         try {
             PrintWriter serverOutput = new PrintWriter(clientSockets.get(clients.get(target)).getOutputStream(), true);
             serverOutput.println("whisper from user '" + source + "' to '" + target + "': " + message);

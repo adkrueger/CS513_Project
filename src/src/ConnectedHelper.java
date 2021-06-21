@@ -4,10 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
-import java.util.HashMap;
 
 
 class ConnectedHelper implements Runnable {
@@ -27,7 +24,6 @@ class ConnectedHelper implements Runnable {
     public void run() {
         BufferedReader clientInput = null;
         PrintWriter serverOutput = null;
-        boolean noNickname = true;
 
         try {
             clientInput = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -40,11 +36,7 @@ class ConnectedHelper implements Runnable {
         System.out.println("Client at port " + this.clientPort + " has a thread.");
         String curr_message;
 
-//        curr_message = Integer.toString(this.clientPort);
-//        serverOutput.println(curr_message);
-//        System.out.println("Server returned: " + curr_message);
-
-        System.out.println("currently, server has the following list:");
+        System.out.println("Currently, server has the following list of clients:");
         System.out.println(this.server.getClientList().toString());
 
         // attempt to set nickname; if this is false, then the client disconnected
@@ -56,14 +48,11 @@ class ConnectedHelper implements Runnable {
         while(true) {
             try {
                 curr_message = clientInput.readLine();
-//                serverOutput.println(curr_message);
                 System.out.println("Client '" + clientNick + "' says: " + curr_message);
 
                 String[] inputCommands = curr_message.split(" ", 3);
-//                System.out.println(inputCommands);
 
                 if(inputCommands.length >= 1) {
-//                    System.out.println("client command is: " + inputCommands[1]);
                     String clientCommand = inputCommands[0];
 
                     if(clientCommand.equals("!list")) {
@@ -94,10 +83,6 @@ class ConnectedHelper implements Runnable {
                         else if(clientCommand.equals("!whisper")) {
                             if(inputCommands.length >= 3) {
                                 if(server.userExists(inputCommands[1])) {
-                                    System.out.println("client exists, attempting to whisper...........................");
-                                    for(String s : inputCommands) {
-                                        System.out.println(s);
-                                    }
                                     if(server.whisper(this.clientNick, inputCommands[1], inputCommands[2])) {
                                         System.out.println("User '" + this.clientNick + "' whispered to user '" + inputCommands[1] + "': " + inputCommands[2]);
                                         serverOutput.println("You whispered to user '" + inputCommands[1] + "'.");
@@ -134,7 +119,6 @@ class ConnectedHelper implements Runnable {
 
     private boolean attemptNicknameSet(BufferedReader clientInput, PrintWriter serverOutput, boolean isRename) {
         while(true) {
-            System.out.println("in big attempt nickname set");
             try {
                 String curr_message = clientInput.readLine();
                 System.out.println("Client says: " + curr_message);
@@ -158,7 +142,6 @@ class ConnectedHelper implements Runnable {
     }
 
     private boolean attemptNicknameSet(BufferedReader clientInput, PrintWriter serverOutput, String nickname, boolean isRename) {
-        System.out.println("in attempt nickname set (baby version)");
         if (!server.isDuplicateName(nickname)) {
             server.setNickname(this.clientPort, nickname, isRename);
             this.clientNick = nickname;

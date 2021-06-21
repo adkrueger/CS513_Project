@@ -2,7 +2,6 @@ package src;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.Buffer;
 import java.util.Scanner;
 
 public class Client {
@@ -10,6 +9,7 @@ public class Client {
     private boolean isDuplicate;
     private String[] legalCommands = {"!help", "!list", "!message", "!rename", "!whisper"};
 
+    // ClientHelper uses this to tell us if the name is a duplicate or not
     public void setDuplicate(boolean duplicate) {
         isDuplicate = duplicate;
     }
@@ -29,7 +29,7 @@ public class Client {
         Scanner scan = new Scanner(System.in);
         try {
             Socket socket = new Socket("127.0.0.1", portNum);
-            System.out.println("Connected! Enter your nickname for the server.");
+            System.out.println("Successfully connected to the server!");
             PrintWriter clientOutput = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader serverOutput = new BufferedReader( new InputStreamReader(socket.getInputStream()));
 
@@ -38,6 +38,7 @@ public class Client {
             String nickname = enterNamingLoop(scan, clientOutput, serverOutput);
             if(nickname == null) {
                 System.out.println("Failed to set nickname.");
+                closeStreams(clientOutput, serverOutput);
                 return;
             }
 
@@ -54,13 +55,12 @@ public class Client {
                 curr_input = scan.nextLine();
                 String currCommand = curr_input.split(" ")[0];
                 if(curr_input.length() >= 5 && isLegalCommand(currCommand)) {
-//                    System.out.println(curr_input.substring(5));
-//                    System.out.println(curr_input.substring(5).equals("!help"));
                     if(!currCommand.equals("!help")) {
                         if(currCommand.equals("!rename")) {
                             nickname = enterRenamingLoop(scan, clientOutput, serverOutput, "!rename " + curr_input.split(" ")[1]);
                             if(nickname == null) {
                                 System.out.println("Failed to set nickname.");
+                                closeStreams(clientOutput, serverOutput);
                                 return;
                             }
                             while (isDuplicate) {
@@ -94,9 +94,12 @@ public class Client {
                     System.out.println("Unrecognized command, please type '!help' to see valid commands.");
                 }
             }
+            closeStreams(clientOutput, serverOutput);
+            return;
         }
         catch(IOException e) {
             System.out.println("Error connecting to server socket: " + e);
+            return;
         }
 
     }
@@ -108,7 +111,7 @@ public class Client {
         return false;
     }
 
-    public String enterNamingLoop(Scanner scan, PrintWriter clientOutput, BufferedReader serverOutput) {
+    private String enterNamingLoop(Scanner scan, PrintWriter clientOutput, BufferedReader serverOutput) {
         try {
             String nickname = scan.nextLine();
             System.out.println("accepted name: " + nickname);
@@ -119,7 +122,7 @@ public class Client {
             clientOutput.println(nickname);
             System.out.println("nickname written to server");
             String response = serverOutput.readLine();
-            System.out.println("sent nickname, serverOutput is: " + response);
+            System.out.println("serverOutput is: " + response);
             while (response.equals("duplicate")) {
                 System.out.println("Server already has nickname '" + nickname + "' on record, " +
                         "please enter a unique one.");
@@ -136,7 +139,7 @@ public class Client {
         }
     }
 
-    public String enterRenamingLoop(Scanner scan, PrintWriter clientOutput, BufferedReader serverOutput, String nickname) {
+    private String enterRenamingLoop(Scanner scan, PrintWriter clientOutput, BufferedReader serverOutput, String nickname) {
         while(nickname.trim().isEmpty()) {
             System.out.println("Nickname must not be whitespace or empty. Please try again:");
             nickname = scan.nextLine();
@@ -150,11 +153,11 @@ public class Client {
             System.out.println("Sleep interrupted: " + e);
         }
 
-//            String response = serverOutput.readLine();
-//            System.out.println("sent nickname, serverOutput is: " + response);
-
-//        System.out.println("nickname successfully set to " + nickname);
         return nickname;
+    }
+
+    private void closeStreams(PrintWriter clientOutput, BufferedReader serverOutput) {
+
     }
 
 }

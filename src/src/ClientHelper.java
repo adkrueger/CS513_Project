@@ -3,10 +3,7 @@ package src;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 
 public class ClientHelper implements Runnable {
 
@@ -21,6 +18,7 @@ public class ClientHelper implements Runnable {
     public void run() {
         BufferedReader serverInput = null;
 
+        // set up server input stream
         try {
             serverInput = new BufferedReader(new InputStreamReader(server.getInputStream()));
         } catch (IOException e) {
@@ -30,14 +28,17 @@ public class ClientHelper implements Runnable {
         System.out.println("Client is now accepting output from the server.");
         String curr_message;
 
+        // just keep reading messages as the server outputs them
         while (true) {
             try {
                 curr_message = serverInput.readLine();
+                // talk to the Client in case they were told that they sent a duplicate nickname
                 if(curr_message.equals("duplicate")) {
                     System.out.println("received duplicate message");
                     client.setDuplicate(true);
                 }
                 else {
+                    // otherwise, just print out whatever the server sent
                     client.setDuplicate(false);
                     System.out.println(">> " + curr_message);
                 }

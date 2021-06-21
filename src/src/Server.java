@@ -17,6 +17,7 @@ public class Server {
     private ServerSocket serverSocket;
 
     public static void main(String[] args) {
+        // give user some output to guide them through creating the server
         System.out.println("Initializing server...");
         Scanner scan = new Scanner(System.in);
         System.out.println("Please enter a socket number.\nNote that the number must be " +
@@ -26,6 +27,8 @@ public class Server {
         System.out.println("Server initialized with socket number " + currSockNum + ".\nServer will now " +
                 "listen for Clients.");
         System.out.println("Please use Ctrl+C to end the Server.");
+
+        // have the server start listening and spawning threads
         server.beginListening();
 
     }
@@ -45,13 +48,16 @@ public class Server {
 
     private void beginListening() {
         System.out.println("Server started, now waiting for client...");
+
+        // essentially just accept connections until the user hits Ctrl+C
         while(true) {
             try {
                 System.out.println("Server is waiting for next client connection request...");
 
                 this.currClientSocket = serverSocket.accept();
-                clientSockets.put(this.currClientSocket.getPort(), this.currClientSocket);
 
+                // once the Client has connected, add them to the list of connections and start a thread
+                clientSockets.put(this.currClientSocket.getPort(), this.currClientSocket);
                 ConnectedHelper helper = new ConnectedHelper(this.currClientSocket, this);
                 Thread thread = new Thread(helper);
                 thread.start();
@@ -80,13 +86,16 @@ public class Server {
 
         String oldNick = null;
 
+        // if we're renaming, record the old nickname for printing later
         if(isRename) {
             oldNick = getNicknameFromPort(connNum);
         }
 
+        // put the Client in our list of nicknames
         clients.put(nickname, connNum);
         System.out.println("Successfully added " + nickname + " with connection number " + connNum);
 
+        // print something slightly different depending on if the user is renaming or not
         if(isRename) {
             messageAll("User " + oldNick + " renamed to " + nickname + ".", "server");
         }
@@ -101,6 +110,7 @@ public class Server {
         return clients;
     }
 
+    // get the client's nickname based on their port number
     public String getNicknameFromPort(int portNum) {
         if(clients.containsValue(portNum)) {
             for(Map.Entry<String, Integer> entry : clients.entrySet()) {
@@ -112,6 +122,7 @@ public class Server {
         return null;
     }
 
+    // remove the Client (and possibly their connection to the server)
     public void removeUser(String nickname, boolean removeConnection) {
         if(removeConnection) {
             System.out.println("Disconnecting user " + nickname + ".");
@@ -121,10 +132,13 @@ public class Server {
         clients.remove(nickname);
     }
 
+    // send a message to all connected Clients
     public void messageAll(String message, String source) {
         for(Map.Entry<Integer, Socket> c : clientSockets.entrySet()) {
             try {
                 PrintWriter serverOutput = new PrintWriter(c.getValue().getOutputStream(), true);
+
+                // slight differentiation between if the server is sending a message or if it's just a Client
                 if(source.equals("server")) {
                     serverOutput.println(message);
                 }
@@ -138,6 +152,7 @@ public class Server {
         }
     }
 
+    // allow Client source to whisper to Client target
     public boolean whisper(String source, String target, String message) {
         try {
             PrintWriter serverOutput = new PrintWriter(clientSockets.get(clients.get(target)).getOutputStream(), true);
